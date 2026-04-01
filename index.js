@@ -1,10 +1,9 @@
 import { Client, GatewayIntentBits } from "discord.js";
 import axios from "axios";
+import { config } from "dotenv";
 
-const DISCORD_TOKEN =
-  "MTQ4ODk1OTM5NzkyMDExMjY1MA.GNleQj.t090yAj_XOymzlfde7ayqv9-n9qY_dxx8zmPow";
-const TELEGRAM_TOKEN = "8639402369:AAFgc5V2QraKFr7Ut7q8VX76KgXez3O6Z2g";
-const TELEGRAM_CHAT_ID = "-1001865381246";
+config();
+
 const TARGET_VOICE_CHANNEL_ID = null;
 
 const client = new Client({
@@ -16,10 +15,10 @@ const client = new Client({
 });
 
 async function sendTelegramMessage(text) {
-  const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
+  const url = `https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`;
   try {
     await axios.post(url, {
-      chat_id: TELEGRAM_CHAT_ID,
+      chat_id: process.env.TELEGRAM_CHAT_ID,
       text: text,
       parse_mode: "HTML",
     });
@@ -54,4 +53,4 @@ client.on("voiceStateUpdate", (oldState, newState) => {
   }
 });
 
-client.login(DISCORD_TOKEN);
+client.login(process.env.DISCORD_TOKEN);
