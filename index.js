@@ -4,8 +4,6 @@ import { config } from "dotenv";
 
 config();
 
-const TARGET_VOICE_CHANNEL_ID = null;
-
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -13,6 +11,8 @@ const client = new Client({
     GatewayIntentBits.GuildMembers,
   ],
 });
+
+const SUPER_ADMIN = "хозяин";
 
 async function sendTelegramMessage(text) {
   const url = `https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`;
@@ -36,21 +36,29 @@ client.on("voiceStateUpdate", (oldState, newState) => {
   const oldChannel = oldState.channel;
   const newChannel = newState.channel;
 
-  const shouldNotify =
-    !TARGET_VOICE_CHANNEL_ID ||
-    (newChannel && newChannel.id === TARGET_VOICE_CHANNEL_ID) ||
-    (oldChannel && oldChannel.id === TARGET_VOICE_CHANNEL_ID);
-
-  if (!shouldNotify) return;
+  if (member.displayName === SUPER_ADMIN) return;
 
   if (!oldChannel && newChannel) {
-    const message = `🎤 <b>${member.displayName}</b> зашел в голосовой канал\n\n📢 Канал: <b>${newChannel.name}</b>`;
+    const message = `
+    🎤 <b>${member.displayName}</b> зашел в голосовой канал
+    \n\n
+    📢 Канал: <b>${newChannel.name}
+    </b>`;
+
     sendTelegramMessage(message);
     console.log(`${member.displayName} зашел в ${newChannel.name}`);
   } else if (oldChannel && !newChannel) {
-    const message = `👋 <b>${member.displayName}</b> покинул голосовой канал\n\n📢 Канал: <b>${oldChannel.name}</b>`;
+    const message = `
+    👋 <b>${member.displayName}</b> покинул голосовой канал
+    \n\n
+    📢 Канал: <b>${oldChannel.name}</b>`;
+
     sendTelegramMessage(message);
   }
 });
 
-client.login(process.env.DISCORD_TOKEN);
+function launch() {
+  client.login(process.env.DISCORD_TOKEN);
+}
+
+launch();
