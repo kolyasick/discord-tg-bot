@@ -12,7 +12,6 @@ const client = new Client({
   ],
 });
 
-const SUPER_ADMIN = "хозяин";
 
 async function sendTelegramMessage(text) {
   const url = `https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`;
@@ -35,8 +34,6 @@ client.on("voiceStateUpdate", (oldState, newState) => {
   const member = newState.member;
   const oldChannel = oldState.channel;
   const newChannel = newState.channel;
-
-  if (member.displayName === SUPER_ADMIN) return;
 
   if (!oldChannel && newChannel) {
     const message = `
