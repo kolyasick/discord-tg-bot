@@ -38,7 +38,7 @@ client.on("voiceStateUpdate", (oldState, newState) => {
   if (!oldChannel && newChannel) {
     const message = `
     🎤 <b>${member.displayName}</b> зашел в голосовой канал
-    \n\n
+    \n
     📢 Канал: <b>${newChannel.name}
     </b>`;
 
@@ -47,7 +47,7 @@ client.on("voiceStateUpdate", (oldState, newState) => {
   } else if (oldChannel && !newChannel) {
     const message = `
     👋 <b>${member.displayName}</b> покинул голосовой канал
-    \n\n
+    \n
     📢 Канал: <b>${oldChannel.name}</b>`;
 
     sendTelegramMessage(message);
